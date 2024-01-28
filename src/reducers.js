@@ -2,6 +2,13 @@ const initialState = {
   orders: [],
 };
 
+const calculateTimeDifference = (startTime) => {
+  const currentTime = new Date();
+  const timeDifference = currentTime - new Date(startTime);
+  const minutes = Math.floor(timeDifference / (1000 * 60));
+  const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+  return { minutes, seconds };
+};
 
 const getNextStage = (currentStage) => {
   switch (currentStage) {
@@ -21,7 +28,7 @@ const rootReducer = (state = initialState, action) => {
     case 'PLACE_ORDER':
       return {
         ...state,
-        orders: [...state.orders, action.payload],
+        orders: [...state.orders,{...action.payload,time: new Date()}],
       };
     case 'UPDATE_STAGE':
       const { orderId, currentStage } = action.payload;
@@ -30,6 +37,7 @@ const rootReducer = (state = initialState, action) => {
           return {
             ...order,
             stage: getNextStage(order.stage),
+            timeDiff: calculateTimeDifference(order.time).minutes + ' min ' + calculateTimeDifference(order.time).seconds + ' sec' 
           };
         }
         return order;

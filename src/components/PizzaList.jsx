@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateStage, cancelOrder } from '../actions';
 
 const PizzaList = () => {
-
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.orders);
 
@@ -13,14 +12,6 @@ const PizzaList = () => {
 
   const handleCancelOrder = (orderId) => {
     dispatch(cancelOrder(orderId));
-  };
-
-  const calculateTimeDifference = (startTime) => {
-    const currentTime = new Date();
-    const timeDifference = currentTime - startTime;
-    const minutes = Math.floor(timeDifference / (1000 * 60));
-    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-    return { minutes, seconds };
   };
 
   return (
@@ -41,7 +32,7 @@ const PizzaList = () => {
               <td>{order.id}</td>
               <td>{order.stage}</td>
               <td>
-                {calculateTimeDifference(order.time).minutes + ' min ' + calculateTimeDifference(order.time).seconds + ' sec'}
+                {order.timeDiff}
               </td>
               <td>
                 {order.stage !== 'Order Picked' && (
@@ -49,7 +40,10 @@ const PizzaList = () => {
                     <button onClick={() => handleUpdateStage(order.id, 'Next')}>Next</button>
                   </>
                 )}
-                <button onClick={() => handleCancelOrder(order.id)} disabled={order.stage === 'Order Picked'}>
+                <button
+                  onClick={() => handleCancelOrder(order.id)}
+                  disabled={order.stage === 'Order Picked'}
+                >
                   Cancel
                 </button>
               </td>
@@ -58,7 +52,7 @@ const PizzaList = () => {
         </tbody>
       </table>
       <div>
-        <p>Total orders delivered: {orders.filter((order) => order.stage === 'Order Ready').length}</p>
+        <p>Total orders delivered: {orders.filter((order) => order.stage === 'Order Picked').length}</p>
       </div>
     </div>
   );

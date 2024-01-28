@@ -18,6 +18,7 @@ const OrderForm = () => {
       base: pizzaBase,
       stage: 'Order Placed',
       time: new Date(),
+      timeDiff: ""
     };
 
     dispatch(placeOrder(order));
