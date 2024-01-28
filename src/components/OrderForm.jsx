@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { placeOrder } from '../actions';
 
+const MAX_ORDERS = 10;
+var orderID = 1;
+
 const OrderForm = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.orders);
@@ -11,14 +14,19 @@ const OrderForm = () => {
   const [pizzaBase, setPizzaBase] = useState('');
 
   const handlePlaceOrder = () => {
+    if (orders.length >= MAX_ORDERS) {
+      alert('Not taking any order for now');
+      return;
+    }
+
     const order = {
-      id: orders.length + 1,
+      id: orderID++,
       type: pizzaType,
       size: pizzaSize,
       base: pizzaBase,
       stage: 'Order Placed',
       time: new Date(),
-      timeDiff: ""
+      timeDiff: '',
     };
 
     dispatch(placeOrder(order));
@@ -54,7 +62,7 @@ const OrderForm = () => {
           <option value="Thick">Thick</option>
         </select>
       </label>
-      <button onClick={handlePlaceOrder} disabled={isButtonDisabled}>
+      <button onClick={handlePlaceOrder} disabled={false}>
         Place Order
       </button>
     </div>
