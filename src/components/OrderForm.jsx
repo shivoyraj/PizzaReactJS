@@ -62,7 +62,7 @@ const OrderForm = () => {
           <option value="Thick">Thick</option>
         </select>
       </label>
-      <button onClick={handlePlaceOrder} disabled={false}>
+      <button onClick={handlePlaceOrder} disabled={isButtonDisabled}>
         Place Order
       </button>
     </div>
